@@ -132,6 +132,8 @@ void fill_board(int n, int (*ptr)[n])
         }
     }
 
+
+    
     //
 
     // else {
