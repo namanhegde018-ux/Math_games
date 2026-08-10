@@ -1,15 +1,10 @@
-#include <stdio.h>
+#include "Magic_Board_array.h"
 
 void fill_board(int n, int (*ptr)[n])
 {
     // Edge Cases
 
-    if (n == 0)
-    {
-        ptr[0][0] = 0;
-    }
-
-    else if (n == 1)
+    if (n == 1)
     {
         ptr[0][0] = 1;
     }
@@ -55,7 +50,7 @@ void fill_board(int n, int (*ptr)[n])
 
     // SAMPUTAVIDHI Algorithm
 
-    else if ((n % 2 == 0) && (n % 4 == 0))
+    else if (n % 2 == 0)
     {
         int mulapankti[n];
         int gunapankti[n];
@@ -131,14 +126,6 @@ void fill_board(int n, int (*ptr)[n])
             }
         }
     }
-
-
-    
-    //
-
-    // else {
-
-    //}
 }
 
 void print_board(int n, int (*ptr)[n])
@@ -152,54 +139,11 @@ void print_board(int n, int (*ptr)[n])
         printf("\n");
     }
 
+    if ((n % 2 == 0) && (n % 4 != 0)) {
+        printf("\nThis is PARTIAL MAGIC BOARD i.e. Diagonal elements are not equal to sum.\nBut sum of two diagonals divided by 2 is equal to magic board sum.\n");
+    }
+
     printf("\n\n");
     int sum = n * ((n * n) + 1) / 2;
-    printf("Sum = %d", sum);
-}
-
-int main()
-{
-    int n;
-    while (1)
-    {
-        printf("Enter the number of rows: ");
-        scanf("%d", &n);
-        if (n > 0)
-        {
-            if (n % 2 == 0 && n != 0)
-            {
-                if (n % 4 != 0)
-                {
-                    printf("The algorithm is not till found. Please wait: \n");
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
-        else
-        {
-            printf("Please Enter POSITIVE integer: \n");
-        }
-    }
-
-    int end = n * n;
-    int magic_board[n][n];
-    int (*ptr)[n] = magic_board;
-    int *zero_ptr = &magic_board[0][0];
-    for (int i = 0; i < end; i++)
-    {
-        *zero_ptr = 0;
-        zero_ptr++;
-    }
-
-    fill_board(n, ptr);
-    print_board(n, ptr);
-
-    return 0;
+    printf("Sum = %d\n\n", sum);
 }
