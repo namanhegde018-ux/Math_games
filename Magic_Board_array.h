@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 static inline void set_zero(int n, int (*ptr)[n]) {
     memset(ptr, 0, n*n*sizeof(int));

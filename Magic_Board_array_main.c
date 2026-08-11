@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "Magic_Board_array.h"
 
 int main()
@@ -19,12 +20,16 @@ int main()
         }
     }
 
-    int magic_board[n][n];
-    int (*ptr)[n] = magic_board;
-    set_zero(n, ptr);
+    int (*magic_board)[n] = malloc(n * sizeof *magic_board);
+    if (magic_board == NULL) {
+        return 1;
+    }
+    set_zero(n, magic_board);
 
-    fill_board(n, ptr);
-    print_board(n, ptr);
+    fill_board(n, magic_board);
+    print_board(n, magic_board);
+
+    free(magic_board);
 
     return 0;
 }

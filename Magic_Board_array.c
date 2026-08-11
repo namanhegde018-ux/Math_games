@@ -52,22 +52,36 @@ void fill_board(int n, int (*ptr)[n])
 
     else if (n % 2 == 0)
     {
-        int mulapankti[n];
-        int gunapankti[n];
+        int *mulapankti = malloc(n*sizeof(int));
+        int *gunapankti = malloc(n*sizeof(int));
+
+        if (mulapankti == NULL || gunapankti == NULL) {
+            free(mulapankti);
+            free(gunapankti);
+            return;
+        }
         int square = n * n;
         int *start;
         int *end;
         int mid = n / 2;
-        int chadya[n][n];
-        int chadaka[n][n];
+        int (*chadya)[n] = malloc(n * sizeof *chadya);
+        int (*chadaka)[n] = malloc(n * sizeof *chadaka);
+
+        if (chadya == NULL || chadaka == NULL) {
+            free(chadya);
+            free(chadaka);
+            free(mulapankti);
+            free(gunapankti);
+            return;
+        }
         int rows = 0;
         int columns = 0;
         for (int i = 1; i <= n; i++)
         {
             mulapankti[i - 1] = i;
         }
-        start = &mulapankti[mid - 1];
-        end = &mulapankti[mid];
+        start = mulapankti + (mid - 1);
+        end = mulapankti + (mid);
         for (columns = 0; columns < n; columns += 2)
         {
             chadya[rows][columns] = *start;
@@ -95,8 +109,8 @@ void fill_board(int n, int (*ptr)[n])
         }
         rows = 0;
         columns = 0;
-        start = &gunapankti[0];
-        end = &gunapankti[n - 1];
+        start = gunapankti;
+        end = gunapankti + (n - 1);
         for (rows = 0; rows < n; rows += 2)
         {
             chadaka[rows][columns] = *start;
@@ -125,6 +139,10 @@ void fill_board(int n, int (*ptr)[n])
                 ptr[rows][columns] = chadya[rows][columns] + chadaka[(n - 1) - rows][columns];
             }
         }
+        free(chadya);
+        free(chadaka);
+        free(mulapankti);
+        free(gunapankti);
     }
 }
 
