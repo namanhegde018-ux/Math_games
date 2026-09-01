@@ -1,3 +1,5 @@
+//OM
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -10,13 +12,12 @@ int main()
     {
         printf("Enter the number of rows: ");
         scanf("%d", &n);
-        if ((n > 0) && (n != 2))
+        if (n > 0)
         {
             break;
         }
-        else
-        {
-            printf("Please Enter a POSITIVE Number or Number OTHER THAN 2. \n\n");
+        else {
+            printf("Enter NON-ZERO POSITIVE number\n");
         }
     }
 

@@ -1,3 +1,5 @@
+// OM
+
 #include "Magic_Board_array.h"
 
 void fill_board(int n, int (*ptr)[n])
@@ -7,6 +9,10 @@ void fill_board(int n, int (*ptr)[n])
     if (n == 1)
     {
         ptr[0][0] = 1;
+    }
+
+    else if (n == 2) {
+        printf("No Magic Square exists\n");
     }
 
     // TURAGAGATI Algorithm
@@ -50,12 +56,13 @@ void fill_board(int n, int (*ptr)[n])
 
     // SAMPUTAVIDHI Algorithm
 
-    else if (n % 2 == 0)
+    else if (n % 4 == 0)
     {
-        int *mulapankti = malloc(n*sizeof(int));
-        int *gunapankti = malloc(n*sizeof(int));
+        int *mulapankti = malloc(n * sizeof(int));
+        int *gunapankti = malloc(n * sizeof(int));
 
-        if (mulapankti == NULL || gunapankti == NULL) {
+        if (mulapankti == NULL || gunapankti == NULL)
+        {
             free(mulapankti);
             free(gunapankti);
             return;
@@ -67,7 +74,8 @@ void fill_board(int n, int (*ptr)[n])
         int (*chadya)[n] = malloc(n * sizeof *chadya);
         int (*chadaka)[n] = malloc(n * sizeof *chadaka);
 
-        if (chadya == NULL || chadaka == NULL) {
+        if (chadya == NULL || chadaka == NULL)
+        {
             free(chadya);
             free(chadaka);
             free(mulapankti);
@@ -139,10 +147,176 @@ void fill_board(int n, int (*ptr)[n])
                 ptr[rows][columns] = chadya[rows][columns] + chadaka[(n - 1) - rows][columns];
             }
         }
+
         free(chadya);
         free(chadaka);
         free(mulapankti);
         free(gunapankti);
+    }
+
+    // VISHAMAGARBHA SUTRA
+
+    else
+    {
+        int rows;
+        int cols;
+        int square = n * n;
+        int num = 1;
+        int i;
+        int shlishta = (n / 2) - 2;
+        int pita;
+        for (rows = 0; rows < n; rows++)
+        {
+            for (cols = 0; cols < n; cols++)
+            {
+                ptr[rows][cols] = num;
+                num++;
+            }
+        }
+        int *ptr1 = &ptr[0][0];
+        int *ptr2 = &ptr[n - 1][n - 1];
+        int temp;
+        // for main diagonal
+        for (i = 0; i < (n / 2); i++)
+        {
+            ptr1 = &ptr[i][i];
+            ptr2 = &ptr[n - 1 - i][n - 1 - i];
+            temp = *ptr1;
+            *ptr1 = *ptr2;
+            *ptr2 = temp;
+        }
+
+        // for another diagonal
+        for (i = 0; i < (n / 2); i++)
+        {
+            ptr1 = &ptr[i][n - 1 - i];
+            ptr2 = &ptr[n - 1 - i][i];
+            temp = *ptr1;
+            *ptr1 = *ptr2;
+            *ptr2 = temp;
+        }
+
+        ptr1 = &ptr[(n / 2) - 1][n - 1];
+        ptr2 = &ptr[n / 2][n - 1];
+        temp = *ptr1;
+        *ptr1 = *ptr2;
+        *ptr2 = temp;
+
+        int flag = 0;
+        int k = 1;
+        pita = shlishta - 1;
+        while (pita != 0)
+        {
+            if (!flag)
+            {
+                ptr1 = &ptr[(n / 2) - 1][k];
+                ptr2 = &ptr[n / 2][k];
+                temp = *ptr1;
+                *ptr1 = *ptr2;
+                *ptr2 = temp;
+                pita -= 1;
+                flag = 1;
+            }
+            else
+            {
+                ptr1 = &ptr[(n / 2) - 1][n - 1 - k];
+                ptr2 = &ptr[n / 2][n - 1 - k];
+                temp = *ptr1;
+                *ptr1 = *ptr2;
+                *ptr2 = temp;
+                pita -= 1;
+                flag = 0;
+                k += 1;
+            }
+        }
+
+        int count;
+        int column = 0;
+        int row = 0;
+        // row exchange
+        for (i = 0; i < ((n / 2) - 1); i++)
+        {
+            count = shlishta;
+            column = i;
+            while (count != 0)
+            {
+                if ((i + column + 1) != (n - 1))
+                {
+                    ptr1 = &ptr[i][column + 1];
+                    ptr2 = &ptr[n - 1 - i][column + 1];
+                    temp = *ptr1;
+                    *ptr1 = *ptr2;
+                    *ptr2 = temp;
+                    column++;
+                    count--;
+                }
+                else
+                {
+                    column++;
+                }
+            }
+        }
+
+        // column exchange
+        flag = 0;
+        int columnsum;
+        int sum = (n * ((n * n) + 1)) / 2;
+        int shortage;
+        int fill;
+        for (i = 0; i < (n / 2); i++)
+        {
+            pita = shlishta;
+            columnsum = 0;
+            for (int j = 0; j < n; j++)
+            {
+                columnsum += ptr[j][i];
+            }
+            row = 0;
+            shortage = sum - columnsum;
+            fill = shortage / shlishta;
+            while ((!flag) && (pita))
+            {
+                if (row == i) {
+                    row++;
+                    flag = 1;
+                    break;
+                }
+                ptr1 = &ptr[row][i];
+                ptr2 = &ptr[n - 1 - row][n - 1 - i];
+                if ((*ptr2) - (*ptr1) == fill)
+                {
+                    temp = *ptr1;
+                    *ptr1 = *ptr2;
+                    *ptr2 = temp;
+                    ptr1 = &ptr[n - 1 - row][i];
+                    ptr2 = &ptr[row][n - 1 - i];
+                    temp = *ptr1;
+                    *ptr1 = *ptr2;
+                    *ptr2 = temp;
+                    pita -= 2;
+                }
+                row++;
+            }
+
+            while (flag && pita) {
+                if (row == (n - 1 - i)) {
+                    flag = 0;
+                    row++;
+                    break;
+                }
+                ptr1 = &ptr[row][i];
+                ptr2 = &ptr[row][n - 1 - i];
+                if ((*ptr2) - (*ptr1) == (shortage / shlishta))
+                {
+                    temp = *ptr1;
+                    *ptr1 = *ptr2;
+                    *ptr2 = temp;
+                    pita -= 1;
+                }
+                row++;
+            }
+        }
+        
     }
 }
 
@@ -155,10 +329,6 @@ void print_board(int n, int (*ptr)[n])
             printf("%d ", ptr[i][j]);
         }
         printf("\n");
-    }
-
-    if ((n % 2 == 0) && (n % 4 != 0)) {
-        printf("\nThis is PARTIAL MAGIC BOARD i.e. Diagonal elements are not equal to sum.\nBut sum of two diagonals divided by 2 is equal to magic board sum.\n");
     }
 
     printf("\n\n");

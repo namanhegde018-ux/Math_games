@@ -1,3 +1,5 @@
+//OM
+
 #ifndef MAGIC_BOARD_ARRAY_H
 #define MAGIC_BOARD_ARRAY_H
 
