@@ -2,17 +2,21 @@
 
 #include "Magic_Board_array.h"
 
+void swap(int *ptr1, int *ptr2)
+{
+    int temp;
+    temp = *ptr1;
+    *ptr1 = *ptr2;
+    *ptr2 = temp;
+}
+
 void fill_board(int n, int (*ptr)[n])
 {
-    // Edge Cases
+    // EDGE CASES
 
     if (n == 1)
     {
         ptr[0][0] = 1;
-    }
-
-    else if (n == 2) {
-        printf("No Magic Square exists\n");
     }
 
     // TURAGAGATI Algorithm
@@ -160,7 +164,6 @@ void fill_board(int n, int (*ptr)[n])
     {
         int rows;
         int cols;
-        int square = n * n;
         int num = 1;
         int i;
         int shlishta = (n / 2) - 2;
@@ -176,14 +179,13 @@ void fill_board(int n, int (*ptr)[n])
         int *ptr1 = &ptr[0][0];
         int *ptr2 = &ptr[n - 1][n - 1];
         int temp;
+
         // for main diagonal
         for (i = 0; i < (n / 2); i++)
         {
             ptr1 = &ptr[i][i];
             ptr2 = &ptr[n - 1 - i][n - 1 - i];
-            temp = *ptr1;
-            *ptr1 = *ptr2;
-            *ptr2 = temp;
+            swap(ptr1, ptr2);
         }
 
         // for another diagonal
@@ -191,16 +193,12 @@ void fill_board(int n, int (*ptr)[n])
         {
             ptr1 = &ptr[i][n - 1 - i];
             ptr2 = &ptr[n - 1 - i][i];
-            temp = *ptr1;
-            *ptr1 = *ptr2;
-            *ptr2 = temp;
+            swap(ptr1, ptr2);
         }
 
         ptr1 = &ptr[(n / 2) - 1][n - 1];
         ptr2 = &ptr[n / 2][n - 1];
-        temp = *ptr1;
-        *ptr1 = *ptr2;
-        *ptr2 = temp;
+        swap(ptr1, ptr2);
 
         int flag = 0;
         int k = 1;
@@ -211,9 +209,7 @@ void fill_board(int n, int (*ptr)[n])
             {
                 ptr1 = &ptr[(n / 2) - 1][k];
                 ptr2 = &ptr[n / 2][k];
-                temp = *ptr1;
-                *ptr1 = *ptr2;
-                *ptr2 = temp;
+                swap(ptr1, ptr2);
                 pita -= 1;
                 flag = 1;
             }
@@ -221,9 +217,7 @@ void fill_board(int n, int (*ptr)[n])
             {
                 ptr1 = &ptr[(n / 2) - 1][n - 1 - k];
                 ptr2 = &ptr[n / 2][n - 1 - k];
-                temp = *ptr1;
-                *ptr1 = *ptr2;
-                *ptr2 = temp;
+                swap(ptr1, ptr2);
                 pita -= 1;
                 flag = 0;
                 k += 1;
@@ -233,6 +227,7 @@ void fill_board(int n, int (*ptr)[n])
         int count;
         int column = 0;
         int row = 0;
+
         // row exchange
         for (i = 0; i < ((n / 2) - 1); i++)
         {
@@ -244,9 +239,7 @@ void fill_board(int n, int (*ptr)[n])
                 {
                     ptr1 = &ptr[i][column + 1];
                     ptr2 = &ptr[n - 1 - i][column + 1];
-                    temp = *ptr1;
-                    *ptr1 = *ptr2;
-                    *ptr2 = temp;
+                    swap(ptr1, ptr2);
                     column++;
                     count--;
                 }
@@ -258,6 +251,7 @@ void fill_board(int n, int (*ptr)[n])
         }
 
         // column exchange
+
         flag = 0;
         int columnsum;
         int sum = (n * ((n * n) + 1)) / 2;
@@ -274,49 +268,41 @@ void fill_board(int n, int (*ptr)[n])
             row = 0;
             shortage = sum - columnsum;
             fill = shortage / shlishta;
-            while ((!flag) && (pita))
+            for (row = 0; row < n; row++)
             {
-                if (row == i) {
-                    row++;
-                    flag = 1;
-                    break;
-                }
-                ptr1 = &ptr[row][i];
-                ptr2 = &ptr[n - 1 - row][n - 1 - i];
-                if ((*ptr2) - (*ptr1) == fill)
+                if ((row != i) && (row != (n - 1 - i)))
                 {
-                    temp = *ptr1;
-                    *ptr1 = *ptr2;
-                    *ptr2 = temp;
-                    ptr1 = &ptr[n - 1 - row][i];
+                    ptr1 = &ptr[row][i];
                     ptr2 = &ptr[row][n - 1 - i];
-                    temp = *ptr1;
-                    *ptr1 = *ptr2;
-                    *ptr2 = temp;
-                    pita -= 2;
+                    if ((*ptr2) - (*ptr1) == fill)
+                    {
+                        swap(ptr1, ptr2);
+                        pita -= 1;
+                    }
+                    else
+                    {
+                        if (pita > 1)
+                        {
+                            ptr1 = &ptr[row][i];
+                            ptr2 = &ptr[n - 1 - row][n - 1 - i];
+                            if ((*ptr2) - (*ptr1) == fill)
+                            {
+                                swap(ptr1, ptr2);
+                                ptr1 = &ptr[n - 1 - row][i];
+                                ptr2 = &ptr[row][n - 1 - i];
+                                swap(ptr1, ptr2);
+                                pita -= 2;
+                            }
+                        }
+                    }
                 }
-                row++;
-            }
 
-            while (flag && pita) {
-                if (row == (n - 1 - i)) {
-                    flag = 0;
-                    row++;
+                if (pita == 0)
+                {
                     break;
                 }
-                ptr1 = &ptr[row][i];
-                ptr2 = &ptr[row][n - 1 - i];
-                if ((*ptr2) - (*ptr1) == (shortage / shlishta))
-                {
-                    temp = *ptr1;
-                    *ptr1 = *ptr2;
-                    *ptr2 = temp;
-                    pita -= 1;
-                }
-                row++;
             }
         }
-        
     }
 }
 
@@ -334,4 +320,34 @@ void print_board(int n, int (*ptr)[n])
     printf("\n\n");
     int sum = n * ((n * n) + 1) / 2;
     printf("Sum = %d\n\n", sum);
+}
+
+bool is_magic_square(int n, int (*board)[n])
+{
+    int target = n * (n * n + 1) / 2;
+    for (int i = 0; i < n; ++i)
+    {
+        int row_sum = 0;
+        int col_sum = 0;
+
+        for (int j = 0; j < n; ++j)
+        {
+            row_sum += board[i][j];
+            col_sum += board[j][i];
+        }
+
+        if (row_sum != target || col_sum != target)
+            return false;
+    }
+
+    int diagonal1 = 0;
+    int diagonal2 = 0;
+
+    for (int i = 0; i < n; ++i)
+    {
+        diagonal1 += board[i][i];
+        diagonal2 += board[i][n - 1 - i];
+    }
+
+    return diagonal1 == target && diagonal2 == target;
 }

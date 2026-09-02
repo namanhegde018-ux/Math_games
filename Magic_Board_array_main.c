@@ -29,6 +29,7 @@ int main()
 
     fill_board(n, magic_board);
     print_board(n, magic_board);
+    printf("Is Magic Board: %d\n\n", is_magic_square(n, magic_board));
 
     free(magic_board);
 
