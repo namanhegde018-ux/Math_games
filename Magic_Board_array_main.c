@@ -1,4 +1,4 @@
-//OM
+// OM
 
 #include <stdio.h>
 #include <string.h>
@@ -12,17 +12,23 @@ int main()
     {
         printf("Enter the number of rows: ");
         scanf("%d", &n);
-        if (n > 0)
+        if ((n > 0) && (n != 2))
         {
             break;
         }
-        else {
-            printf("Enter NON-ZERO POSITIVE number\n");
+        else if (n == 2)
+        {
+            printf("2X2 magic board CANNOT be constructed\n\n");
+        }
+        else
+        {
+            printf("Enter NON-ZERO POSITIVE number\n\n");
         }
     }
 
     int (*magic_board)[n] = malloc(n * sizeof *magic_board);
-    if (magic_board == NULL) {
+    if (magic_board == NULL)
+    {
         return 1;
     }
     set_zero(n, magic_board);
